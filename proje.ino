@@ -54,6 +54,7 @@ void setup() {
   // put your setup code here, to run once:
 pinMode(trigPin, OUTPUT); // setting the output pin with fast output (will output signals in high speed)
 pinMode(echoPin, INPUT); // setting the input pin with fast input (will get signals in high speed) 
+Serial.begin(9600);
 }
 
 #define AUTHORIZED_COUNT 1 /*If you want more Authorized of cards set the count here, and then add the serials below*/
@@ -85,6 +86,14 @@ void loop() {
     { 
       Serial.println("Authenticated");
       Opening = true;
+      digitalWrite(openingled, HIGH);
+      delay(5);
+      digitalWrite(openingled, FALSE);
+      delay(5);
+      digitalWrite(openingled, HIGH);
+      delay(5);
+      digitalWrite(openingled, FALSE);
+      
     }
     else
     { 
@@ -95,7 +104,7 @@ void loop() {
     
     nfc.haltTag();
     
-    digitalWrite(openingled, Opening);
+    digitalWrite(openingled, LOW);
     digitalWrite(securityled, !Opening);
     delay(2000);
     
