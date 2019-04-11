@@ -73,7 +73,7 @@ void loop() {
   byte status;
   byte data[MAX_LEN];
   byte serial[5];
-  boolean Opening = false;
+  int Opening = LOW;
   digitalWrite(securityled, !Opening);
  
   status = nfc.requestTag(MF1_REQIDL, data);
@@ -85,7 +85,7 @@ void loop() {
     if(isAuthorized(serial))
     { 
       Serial.println("Authenticated");
-      Opening = true;
+      Opening = HIGH;
       digitalWrite(openingled, HIGH);
       delay(5);
       digitalWrite(openingled, LOW);
@@ -99,22 +99,25 @@ void loop() {
     { 
       printSerial(serial);
       Serial.println("is NOT authenticated");
-      Opening = false;
+      Opening = LOW;
     }
     
     nfc.haltTag();
     
+    security = !Opening;
     digitalWrite(openingled, LOW);
-    digitalWrite(securityled, !Opening);
+    digitalWrite(securityled, security);
     delay(2000);
     
-    security = !Opening;
+   
   }
 
   delay(500);
   
   if(security == LOW){
-  
+    if(digitalRead(buttonpin) == 1){
+      ignition = HIGH; //ignite car
+    }
   } else {
     if(digitalRead(buttonpin) == 1){
       //alarm
