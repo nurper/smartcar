@@ -8,7 +8,7 @@ int frontled1 = 4;
 int frontled2 = 5;
 int securityled = 6;//blinks when burglar ignites the car, turn on when car is closed
 int openingled = 7; //(green) blinks two times when car is open, turn on when car is ignited
-int buttonpin = 53; //button for ignition, if it is pressed with security HIGH then security alarm
+int buttonpin = 8; //button for ignition, if it is pressed with security HIGH then security alarm
 int buttonstate = 0;
 
 #include <MFRC522.h> 
@@ -30,7 +30,7 @@ Pins        SPI    UNO  Mega2560  Leonardo
 1 on ICPS header
 */
 #define SAD 10
-#define RST 8 //5
+#define RST 9 //5
 MFRC522 nfc(SAD, RST);
 
 //libraries for Barometer
@@ -88,11 +88,11 @@ void loop() {
       Opening = true;
       digitalWrite(openingled, HIGH);
       delay(5);
-      digitalWrite(openingled, FALSE);
+      digitalWrite(openingled, LOW);
       delay(5);
       digitalWrite(openingled, HIGH);
       delay(5);
-      digitalWrite(openingled, FALSE);
+      digitalWrite(openingled, LOW);
       
     }
     else
@@ -112,6 +112,21 @@ void loop() {
   }
 
   delay(500);
+  
+  if(security == LOW){
+  
+  } else {
+    if(digitalRead(buttonpin) == 1){
+      //alarm
+      digitalWrite(securityled, HIGH);
+      delay(1);
+      digitalWrite(securityled, LOW);
+      delay(1);
+      digitalWrite(openingled, HIGH);
+      delay(1);
+      digitalWrite(openingled, LOW);
+    }
+  }
   
   // put your main code here, to run repeatedly:
   lightValue = analogRead(lightSensor);
